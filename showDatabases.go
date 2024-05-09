@@ -3,12 +3,15 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"emirhangumus.com/plugdb/main/contants"
+	"emirhangumus.com/plugdb/main/structs"
 )
 
-func showDatabases(state State) (string, error) {
+func showDatabases(state structs.State) (string, error) {
 	// create database <name>
 	if len(state.SplitBuf) == 1 {
-		files, err := os.ReadDir(dbPath)
+		files, err := os.ReadDir(contants.DBPath)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -18,7 +21,7 @@ func showDatabases(state State) (string, error) {
 			state.Conn.Write([]byte(file.Name() + "\n"))
 		}
 	} else if len(state.SplitBuf) == 2 {
-		files, err := os.ReadDir(dbPath + string(state.SplitBuf[1]))
+		files, err := os.ReadDir(contants.DBPath + string(state.SplitBuf[1]))
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -29,12 +32,12 @@ func showDatabases(state State) (string, error) {
 		}
 	} else if len(state.SplitBuf) == 3 {
 		// the command is show first 1 -> "show" is the command, "first" is the database name, "1" is the number of file the content of the file will be shown
-		files, err := os.ReadDir(dbPath + string(state.SplitBuf[1]))
+		files, err := os.ReadDir(contants.DBPath + string(state.SplitBuf[1]))
 		if err != nil {
 			fmt.Println(err)
 		}
 
-		file, err := os.ReadFile(dbPath + string(state.SplitBuf[1]) + "/" + files[0].Name())
+		file, err := os.ReadFile(contants.DBPath + string(state.SplitBuf[1]) + "/" + files[0].Name())
 		if err != nil {
 			fmt.Println(err)
 		}

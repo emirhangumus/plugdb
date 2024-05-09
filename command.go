@@ -3,17 +3,11 @@ package main
 import (
 	"bytes"
 	"fmt"
+
+	"emirhangumus.com/plugdb/main/structs"
 )
 
-// func printAsciiCodes(input []byte) {
-// 	for _, b := range input {
-// 		fmt.Printf("%d ", b)
-// 	}
-// 	fmt.Println()
-// }
-
-func command_execution(state State) error {
-
+func CommandExecution(state structs.State) error {
 	if isEq(state.TrimmedBuf, []byte("exit")) {
 		fmt.Println("Connection closed")
 		state.Conn.Close()
@@ -23,8 +17,7 @@ func command_execution(state State) error {
 	state.SplitBuf = bytes.Split(state.TrimmedBuf, []byte(" "))
 
 	switch {
-	// is equal to create
-	case isEq(state.SplitBuf[0], []byte("create")):
+	case isEq(state.SplitBuf[0], []byte("database")):
 		_, err := createDatabase(state)
 		if err != nil {
 			return err
@@ -34,7 +27,7 @@ func command_execution(state State) error {
 		if err != nil {
 			return err
 		}
-	case isEq(state.SplitBuf[0], []byte("touch")):
+	case isEq(state.SplitBuf[0], []byte("table")):
 		_, err := createTable(state)
 		if err != nil {
 			return err

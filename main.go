@@ -4,15 +4,9 @@ import (
 	"bytes"
 	"fmt"
 	"net"
-)
 
-type State struct {
-	Conn       net.Conn
-	Buf        []byte
-	TrimmedBuf []byte
-	SplitBuf   [][]byte
-	History    []byte
-}
+	"emirhangumus.com/plugdb/main/structs"
+)
 
 func main() {
 	// Listen on port 5001
@@ -40,7 +34,7 @@ func main() {
 func handleConnection(conn net.Conn) {
 	// open a command line interface
 	fmt.Println("Connection established")
-	state := State{Conn: conn, History: []byte("")}
+	state := structs.State{Conn: conn, History: []byte("")}
 
 	for {
 		// make a buffer to hold incoming data
@@ -52,12 +46,13 @@ func handleConnection(conn net.Conn) {
 			fmt.Println("Error reading:", err.Error())
 			break
 		}
+
 		if reqLen > 0 {
 
 			state.TrimmedBuf = bytes.TrimRight(state.Buf, "\x00")      // Trim trailing null bytes
 			state.TrimmedBuf = bytes.TrimRight(state.TrimmedBuf, "\n") // Trim trailing newline
 
-			err = command_execution(state)
+			err = CommandExecution(state)
 			if err != nil {
 				fmt.Println("Error executing command:", err.Error())
 				break

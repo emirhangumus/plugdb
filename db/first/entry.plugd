@@ -1,3 +1,5 @@
 [database]
 	name=first
+	description=testing the first ever database
 [tables]
+	lol
